@@ -1,0 +1,21 @@
+{
+  "name": "hn-scraper",
+  "version": "1.0.0",
+  "description": "Hacker News AI content scraper",
+  "main": "src/scraper.js",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "hacker-news",
+    "scraper",
+    "ai"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "date": "2026-04-18",
+  "scrapedAt": "2026-04-18T18:21:02.757Z",
+  "count": 18,
+  "stories": [
+    {
+      "id": 47806725,
+      "title": "Claude Design",
+      "url": "https://www.anthropic.com/news/claude-design-anthropic-labs",
+      "points": 1161,
+      "comments": 730,
+      "author": "meetpateltech",
+      "date": "2026-04-17T15:04:09.000Z",
+      "timestamp": 1776438249
+    },
+    {
+      "id": 47815395,
+      "title": "Why Japan has such good railways",
+      "url": "https://worksinprogress.co/issue/why-japan-has-such-good-railways/",
+      "points": 207,
+      "comments": 216,
+      "author": "RickJWagner",
+      "date": "2026-04-18T12:29:06.000Z",
+      "timestamp": 1776515346
+    },
+    {
+      "id": 47807006,
+      "title": "Measuring Claude 4.7's tokenizer costs",
+      "url": "https://www.claudecodecamp.com/p/i-measured-claude-4-7-s-new-tokenizer-here-s-what-it-costs-you",
+      "points": 670,
+      "comments": 469,
+      "author": "aray07",
+      "date": "2026-04-17T15:29:36.000Z",
+      "timestamp": 1776439776
+    },
+    {
+      "id": 47778922,
+      "title": "Are the costs of AI agents also rising exponentially? (2025)",
+      "url": "https://www.tobyord.com/writing/hourly-costs-for-ai-agents",
+      "points": 281,
+      "comments": 112,
+      "author": "louiereederson",
+      "date": "2026-04-15T13:47:58.000Z",
+      "timestamp": 1776260878
+    },
+    {
+      "id": 47806348,
+      "title": "Healthchecks.io now uses self-hosted object storage",
+      "url": "https://blog.healthchecks.io/2026/04/healthchecks-io-now-uses-self-hosted-object-storage/",
+      "points": 182,
+      "comments": 70,
+      "author": "zdw",
+      "date": "2026-04-17T14:29:11.000Z",
+      "timestamp": 1776436151
+    },
+    {
+      "id": 47816999,
+      "title": "The AI Doomers Who Are Playing with Fire",
+      "url": "https://gizmodo.com/the-ai-doomers-who-are-playing-with-fire-2000747606",
+      "points": 10,
+      "comments": 0,
+      "author": "booleanbetrayal",
+      "date": "2026-04-18T16:10:19.000Z",
+      "timestamp": 1776528619
+    },
+    {
+      "id": 47754603,
+      "title": "Average is all you need",
+      "url": "https://rawquery.dev/blog/average-is-all-you-need",
+      "points": 110,
+      "comments": 99,
+      "author": "AlexC04",
+      "date": "2026-04-13T16:36:42.000Z",
+      "timestamp": 1776098202
+    },
+    {
+      "id": 47801639,
+      "title": "Solitaire simulator for finding the best strategy: Current record is 8.590%",
+      "url": "https://github.com/dacracot/Klondike3-Simulator",
+      "points": 52,
+      "comments": 26,
+      "author": "PaulHoule",
+      "date": "2026-04-17T01:38:01.000Z",
+      "timestamp": 1776389881
+    },
+    {
+      "id": 47813428,
+      "title": "\"Liberation Day\" at OpenAI as multiple senior executives announce leaving",
+      "url": "https://mas.to/@carnage4life/116422881496195720",
+      "points": 67,
+      "comments": 11,
+      "author": "riffraff",
+      "date": "2026-04-18T05:41:15.000Z",
+      "timestamp": 1776490875
+    },
+    {
+      "id": 47810407,
+      "title": "Fulu bounty for Ring Camera jailbreak reaches $23k",
+      "url": "https://bounties.fulu.org/bounties/ring-video-doorbells",
+      "points": 30,
+      "comments": 2,
+      "author": "SomaticPirate",
+      "date": "2026-04-17T20:48:04.000Z",
+      "timestamp": 1776458884
+    },
+    {
+      "id": 47799322,
+      "title": "The beginning of scarcity in AI",
+      "url": "https://tomtunguz.com/ai-compute-crisis-2026/",
+      "points": 185,
+      "comments": 216,
+      "author": "gmays",
+      "date": "2026-04-16T20:49:35.000Z",
+      "timestamp": 1776372575
+    },
+    {
+      "id": 47813502,
+      "title": "Remember? \"Sideloading\" is here to stay, and won't go away, they said?",
+      "url": "https://floss.social/@IzzyOnDroid/116415766636505917",
+      "points": 40,
+      "comments": 7,
+      "author": "pabs3",
+      "date": "2026-04-18T06:00:39.000Z",
+      "timestamp": 1776492039
+    },
+    {
+      "id": 47811442,
+      "title": "How to Host a Blog on a Subdirectory Instead of a Subdomain (2025)",
+      "url": "https://www.davidma.org/blog/2025-11-14-host-your-blog-on-a-subdirectory/",
+      "points": 26,
+      "comments": 16,
+      "author": "taikon",
+      "date": "2026-04-17T22:53:18.000Z",
+      "timestamp": 1776466398
+    },
+    {
+      "id": 47778920,
+      "title": "US v. Heppner (S.D.N.Y. 2026) no attorney-client privilege for AI chats [pdf]",
+      "url": "https://fingfx.thomsonreuters.com/gfx/legaldocs/xmvjyjekkpr/Rakoff%20-%20order%20-%20AI.pdf",
+      "points": 193,
+      "comments": 138,
+      "author": "1vuio0pswjnm7",
+      "date": "2026-04-15T13:47:40.000Z",
+      "timestamp": 1776260860
+    },
+    {
+      "id": 47792374,
+      "title": "Artifacts: Versioned storage that speaks Git",
+      "url": "https://blog.cloudflare.com/artifacts-git-for-agents-beta/",
+      "points": 213,
+      "comments": 25,
+      "author": "jgrahamc",
+      "date": "2026-04-16T13:02:03.000Z",
+      "timestamp": 1776344523
+    },
+    {
+      "id": 47792525,
+      "title": "Show HN: MacMind – A transformer neural network in HyperCard on a 1989 Macintosh",
+      "url": "https://github.com/SeanFDZ/macmind",
+      "points": 155,
+      "comments": 42,
+      "author": "hammer32",
+      "date": "2026-04-16T13:16:29.000Z",
+      "timestamp": 1776345389
+    },
+    {
+      "id": 47793411,
+      "title": "Claude Opus 4.7",
+      "url": "https://www.anthropic.com/news/claude-opus-4-7",
+      "points": 1945,
+      "comments": 1436,
+      "author": "meetpateltech",
+      "date": "2026-04-16T14:23:50.000Z",
+      "timestamp": 1776349430
+    },
+    {
+      "id": 47796830,
+      "title": "Qwen3.6-35B-A3B on my laptop drew me a better pelican than Claude Opus 4.7",
+      "url": "https://simonwillison.net/2026/Apr/16/qwen-beats-opus/",
+      "points": 457,
+      "comments": 94,
+      "author": "simonw",
+      "date": "2026-04-16T17:37:20.000Z",
+      "timestamp": 1776361040
+    }
+  ]
+}

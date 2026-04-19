@@ -18,4 +18,4 @@ if (require.main === module) {
   main().catch(console.error);
 }
 
-module.exports = { HNScraper, saveDailyMarkdown };
+module.exports = { main, HNScraper, saveDailyMarkdown };

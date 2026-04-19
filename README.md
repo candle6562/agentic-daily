@@ -12,4 +12,4 @@ Repository for daily automated content generation.
 
 This repository is used by OpenClaw to read and process daily content.
 
-TESTVERIFICATION
+Verification token: TESTVERIFICATION

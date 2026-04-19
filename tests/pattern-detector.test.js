@@ -131,4 +131,56 @@ describe('evaluatePatternWindows', () => {
     expect(firstRun.decisions[0].learningIssue.id).toBe(secondRun.decisions[0].learningIssue.id);
     expect(firstRun.decisions[0].evidence).toEqual(secondRun.decisions[0].evidence);
   });
+
+  it('normalizes review-backflow and reopened events from issue transitions', () => {
+    const events = [
+      {
+        id: 'ev-r1',
+        issueId: 'ISSUE-1',
+        actorId: 'agent-1',
+        timestamp: daysAgo(now, 1),
+        workspaceScope: 'ws-main',
+        responsibleRole: 'Builder',
+        failureReason: 'review changes requested',
+        transition: { from: 'in_review', to: 'in_progress' }
+      },
+      {
+        id: 'ev-r2',
+        issueId: 'ISSUE-2',
+        actorId: 'agent-2',
+        timestamp: daysAgo(now, 2),
+        workspaceScope: 'ws-main',
+        responsibleRole: 'Builder',
+        failureReason: 'review changes requested',
+        transition: { from: 'in_review', to: 'in_progress' }
+      },
+      {
+        id: 'ev-r3',
+        issueId: 'ISSUE-3',
+        actorId: 'agent-3',
+        timestamp: daysAgo(now, 3),
+        workspaceScope: 'ws-main',
+        responsibleRole: 'Builder',
+        failureReason: 'review changes requested',
+        transition: { from: 'in_review', to: 'in_progress' }
+      },
+      {
+        id: 'ev-old-reopen',
+        issueId: 'ISSUE-4',
+        actorId: 'agent-4',
+        timestamp: daysAgo(now, 2),
+        workspaceScope: 'ws-main',
+        responsibleRole: 'Builder',
+        failureReason: 'late reopen',
+        transition: { from: 'done', to: 'in_progress' },
+        reopenedWithinDays: 8
+      }
+    ];
+
+    const result = evaluatePatternWindows({ now: now.toISOString(), events, existingLearningIssues: [] });
+
+    expect(result.decisions).toHaveLength(1);
+    expect(result.decisions[0].patternKey.startsWith('review_backflow|')).toBe(true);
+    expect(result.decisions[0].decision).toBe('triggered');
+  });
 });

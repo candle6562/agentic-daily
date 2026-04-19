@@ -19,6 +19,8 @@ function getLatestDataFile() {
 
 function generateMarkdown(data) {
   const lines = [];
+  const hasStories = Array.isArray(data.stories) && data.stories.length > 0;
+
   lines.push(`# AI Daily Report — ${data.date}`);
   lines.push('');
   lines.push(`*Scraped at ${new Date(data.scrapedAt).toISOString()}*`);
@@ -26,18 +28,27 @@ function generateMarkdown(data) {
   lines.push(`## Summary`);
   lines.push('');
   lines.push(`- **Total AI Stories:** ${data.count}`);
-  const topStory = data.stories.reduce((max, s) => s.points > max.points ? s : max, data.stories[0]);
-  lines.push(`- **Top Story:** "${topStory.title}" (${topStory.points} points)`);
+  if (hasStories) {
+    const topStory = data.stories.reduce((max, story) => (story.points > max.points ? story : max), data.stories[0]);
+    lines.push(`- **Top Story:** "${topStory.title}" (${topStory.points} points)`);
+  } else {
+    lines.push(`- **Top Story:** None`);
+  }
   lines.push('');
   lines.push(`## Stories`);
   lines.push('');
 
-  for (const story of data.stories) {
-    lines.push(`### ${story.title}`);
+  if (!hasStories) {
+    lines.push('- No AI stories found for this date.');
     lines.push('');
-    lines.push(`- **URL:** ${story.url}`);
-    lines.push(`- **Points:** ${story.points} | **Comments:** ${story.comments} | **Author:** ${story.author}`);
-    lines.push('');
+  } else {
+    for (const story of data.stories) {
+      lines.push(`### ${story.title}`);
+      lines.push('');
+      lines.push(`- **URL:** ${story.url}`);
+      lines.push(`- **Points:** ${story.points} | **Comments:** ${story.comments} | **Author:** ${story.author}`);
+      lines.push('');
+    }
   }
 
   return lines.join('\n');

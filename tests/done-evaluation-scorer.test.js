@@ -62,28 +62,38 @@ function buildDoneInput(overrides = {}) {
 }
 
 describe('done-evaluation scorer', () => {
-  it('scores eligible done issue and persists required output metadata', () => {
+  it('scores eligible done issue and persists required snake_case output metadata', () => {
     const scorer = createDoneEvaluationScorer();
 
     const result = scorer.processDoneEvent(buildDoneInput());
 
     expect(result.status).toBe(SCORE_STATUS_SUCCESS);
-    expect(result.sourceIssueId).toBe('issue-1');
-    expect(result.scorerVersion).toBe(SCORER_VERSION_V1);
-    expect(Number.isInteger(result.overallScore)).toBe(true);
-    expect(result.overallScore).toBeGreaterThanOrEqual(0);
-    expect(result.overallScore).toBeLessThanOrEqual(100);
+    expect(result.source_issue_id).toBe('issue-1');
+    expect(result.scorer_version).toBe(SCORER_VERSION_V1);
+    expect(Number.isInteger(result.overall_score)).toBe(true);
+    expect(result.overall_score).toBeGreaterThanOrEqual(0);
+    expect(result.overall_score).toBeLessThanOrEqual(100);
     expect(result.subscores).toEqual(
       expect.objectContaining({
         quality: expect.any(Number),
-        workflowCompliance: expect.any(Number),
-        evidenceCompleteness: expect.any(Number)
+        workflow_compliance: expect.any(Number),
+        evidence_completeness: expect.any(Number)
       })
     );
-    expect(result.reasonCodes.length).toBeGreaterThan(0);
+    expect(result.reason_codes.length).toBeGreaterThan(0);
     expect(result.summary.length).toBeGreaterThan(0);
-    expect(result.scoredAt).toBeTruthy();
-    expect(result.snapshotHash).toBeTruthy();
+    expect(result.scored_at).toBeTruthy();
+    expect(result.snapshot_hash).toBeTruthy();
+    expect(result.score_band).toBeTruthy();
+  });
+
+  it('uses pr artifacts as review evidence and avoids false review penalties', () => {
+    const scorer = createDoneEvaluationScorer();
+
+    const result = scorer.processDoneEvent(buildDoneInput());
+
+    expect(result.status).toBe(SCORE_STATUS_SUCCESS);
+    expect(result.reason_codes).not.toContain('PENALTY_MISSING_REVIEW_EVIDENCE');
   });
 
   it('applies explicit penalty reason codes for missing critical evidence', () => {
@@ -96,15 +106,33 @@ describe('done-evaluation scorer', () => {
     );
 
     expect(result.status).toBe(SCORE_STATUS_SUCCESS);
-    expect(result.reasonCodes).toEqual(
+    expect(result.reason_codes).toEqual(
       expect.arrayContaining([
         'PENALTY_MISSING_TEST_EVIDENCE',
-        'PENALTY_MISSING_REVIEW_EVIDENCE',
         'PENALTY_MISSING_EXECUTION_TRACE'
       ])
     );
-    expect(result.overallScore).toBeLessThan(70);
-    expect(result.scoreBand).toBe(SCORE_BAND_BELOW_THRESHOLD);
+    expect(result.reason_codes).not.toContain('PENALTY_MISSING_REVIEW_EVIDENCE');
+    expect(result.overall_score).toBeLessThan(70);
+    expect(result.score_band).toBe(SCORE_BAND_BELOW_THRESHOLD);
+  });
+
+  it('rejects non-done issue events at the process boundary', () => {
+    const scorer = createDoneEvaluationScorer();
+    const input = buildDoneInput({
+      issue: {
+        id: 'issue-1',
+        identifier: 'AGE-108',
+        title: 'Implement scorer',
+        status: 'in_progress',
+        priority: 'high',
+        labels: ['automation'],
+        completedAt: ISO_TRANSITION
+      }
+    });
+
+    expect(() => scorer.processDoneEvent(input)).toThrow('processDoneEvent requires issue.status to be "done"');
+    expect(scorer.getStoredResultCount()).toBe(0);
   });
 
   it('marks ineligible inputs as not_applicable with one required reason code', () => {
@@ -118,8 +146,8 @@ describe('done-evaluation scorer', () => {
     );
 
     expect(result.status).toBe(SCORE_STATUS_NOT_APPLICABLE);
-    expect(result.reasonCodes).toEqual(['NA_NO_EXECUTION_EVIDENCE']);
-    expect(result.overallScore).toBeUndefined();
+    expect(result.reason_codes).toEqual(['NA_NO_EXECUTION_EVIDENCE']);
+    expect(result.overall_score).toBeUndefined();
     expect(result.subscores).toBeUndefined();
   });
 
@@ -130,8 +158,8 @@ describe('done-evaluation scorer', () => {
     const first = scorer.processDoneEvent(input);
     const second = scorer.processDoneEvent(input);
 
-    expect(second.snapshotHash).toBe(first.snapshotHash);
-    expect(second.scorerVersion).toBe(first.scorerVersion);
+    expect(second.snapshot_hash).toBe(first.snapshot_hash);
+    expect(second.scorer_version).toBe(first.scorer_version);
     expect(scorer.getStoredResultCount()).toBe(1);
   });
 
@@ -141,27 +169,27 @@ describe('done-evaluation scorer', () => {
     const first = scorer.processDoneEvent(buildDoneInput());
     expect(first.status).toBe(SCORE_STATUS_ERROR);
     expect(first.attempt).toBe(1);
-    expect(first.nextRetryDelayMinutes).toBe(RETRY_DELAYS_MINUTES[0]);
+    expect(first.next_retry_delay_minutes).toBe(RETRY_DELAYS_MINUTES[0]);
 
-    const second = scorer.retryErroredResult(first.idempotencyKey);
+    const second = scorer.retryErroredResult(first.idempotency_key);
     expect(second.attempt).toBe(2);
-    expect(second.nextRetryDelayMinutes).toBe(RETRY_DELAYS_MINUTES[1]);
+    expect(second.next_retry_delay_minutes).toBe(RETRY_DELAYS_MINUTES[1]);
 
-    const third = scorer.retryErroredResult(first.idempotencyKey);
+    const third = scorer.retryErroredResult(first.idempotency_key);
     expect(third.attempt).toBe(3);
-    expect(third.nextRetryDelayMinutes).toBe(RETRY_DELAYS_MINUTES[2]);
+    expect(third.next_retry_delay_minutes).toBe(RETRY_DELAYS_MINUTES[2]);
 
-    const fourth = scorer.retryErroredResult(first.idempotencyKey);
+    const fourth = scorer.retryErroredResult(first.idempotency_key);
     expect(fourth.attempt).toBe(4);
     expect(fourth.status).toBe(SCORE_STATUS_ERROR);
-    expect(fourth.nextRetryDelayMinutes).toBeNull();
+    expect(fourth.next_retry_delay_minutes).toBeNull();
   });
 
   it('returns latest-by-issue and version-filtered aggregate rates and distribution', () => {
     const scorer = createDoneEvaluationScorer();
 
     const strong = scorer.processDoneEvent(buildDoneInput());
-    expect([SCORE_BAND_STRONG, SCORE_BAND_ACCEPTABLE, SCORE_BAND_BELOW_THRESHOLD]).toContain(strong.scoreBand);
+    expect([SCORE_BAND_STRONG, SCORE_BAND_ACCEPTABLE, SCORE_BAND_BELOW_THRESHOLD]).toContain(strong.score_band);
 
     scorer.processDoneEvent(
       buildDoneInput({
@@ -181,16 +209,16 @@ describe('done-evaluation scorer', () => {
 
     const latest = scorer.getLatestScoreByIssue('issue-1');
     expect(latest).not.toBeNull();
-    expect(latest.sourceIssueId).toBe('issue-1');
+    expect(latest.source_issue_id).toBe('issue-1');
 
     const aggregates = scorer.getScoreAggregates({
       from: ISO_START,
       to: ISO_END,
-      scorerVersion: SCORER_VERSION_V1
+      scorer_version: SCORER_VERSION_V1
     });
 
-    expect(aggregates.totals.successRate).toBeGreaterThan(0);
-    expect(aggregates.totals.notApplicableRate).toBeGreaterThan(0);
+    expect(aggregates.totals.success_rate).toBeGreaterThan(0);
+    expect(aggregates.totals.not_applicable_rate).toBeGreaterThan(0);
     expect(aggregates.distribution).toEqual(
       expect.objectContaining({
         strong_90_100: expect.any(Number),

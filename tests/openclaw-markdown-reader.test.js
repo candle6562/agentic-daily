@@ -101,4 +101,9 @@ describe('openclaw markdown reader', () => {
     poller.stop();
     expect(clearCalls).toEqual(['timer-id']);
   });
+
+  test('rejects non-positive or non-integer poll intervals', () => {
+    expect(() => createMarkdownPoller({ intervalMs: 0 })).toThrow('intervalMs must be a positive integer');
+    expect(() => createMarkdownPoller({ intervalMs: 12.5 })).toThrow('intervalMs must be a positive integer');
+  });
 });

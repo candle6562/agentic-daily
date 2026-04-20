@@ -54,52 +54,62 @@ function readAndSummarizeLatestMarkdown(options = {}) {
   };
 }
 
-function createMarkdownPoller(options = {}) {
-  const filePath = options.filePath || DEFAULT_MARKDOWN_PATH;
-  const intervalMs = options.intervalMs || POLL_INTERVAL_MS;
-  const onUpdate = options.onUpdate || (() => undefined);
-  const scheduleFn = options.scheduleFn || setInterval;
-  const clearFn = options.clearFn || clearInterval;
-
+function validateIntervalMs(intervalMs) {
   if (!Number.isInteger(intervalMs) || intervalMs <= 0) {
     throw new RangeError('intervalMs must be a positive integer');
   }
+}
 
-  let timerId = null;
+function resolvePollerOptions(options = {}) {
+  const intervalMs = options.intervalMs ?? POLL_INTERVAL_MS;
+  validateIntervalMs(intervalMs);
+  return {
+    filePath: options.filePath ?? DEFAULT_MARKDOWN_PATH,
+    intervalMs,
+    onUpdate: options.onUpdate || (() => undefined),
+    scheduleFn: options.scheduleFn || setInterval,
+    clearFn: options.clearFn || clearInterval,
+  };
+}
 
-  const poll = () => {
+function createPoll(filePath, onUpdate) {
+  return () => {
     const payload = readAndSummarizeLatestMarkdown({ filePath });
     onUpdate(payload);
     return payload;
   };
+}
 
+function createLifecycle(poll, intervalMs, scheduleFn, clearFn) {
+  let timerId = null;
   const start = () => {
     if (timerId !== null) {
       return timerId;
     }
-
-    timerId = scheduleFn(() => {
-      poll();
-    }, intervalMs);
-
+    timerId = scheduleFn(poll, intervalMs);
     return timerId;
   };
-
   const stop = () => {
     if (timerId === null) {
       return;
     }
-
     clearFn(timerId);
     timerId = null;
   };
+  return { start, stop };
+}
+
+function createMarkdownPoller(options = {}) {
+  const resolved = resolvePollerOptions(options);
+  const poll = createPoll(resolved.filePath, resolved.onUpdate);
+  const lifecycle = createLifecycle(poll, resolved.intervalMs, resolved.scheduleFn, resolved.clearFn);
 
   return {
-    filePath,
-    intervalMs,
+    filePath: resolved.filePath,
+    intervalMs: resolved.intervalMs,
     poll,
-    start,
-    stop,
+    start: lifecycle.start,
+    stop: lifecycle.stop,
   };
 }
 

@@ -1,5 +1,6 @@
 const { HNScraper } = require('./src/scraper');
 const { saveDailyMarkdown } = require('./src/daily-markdown');
+const { createMarkdownPoller, readAndSummarizeLatestMarkdown } = require('./src/openclaw-markdown-reader');
 const path = require('path');
 const fs = require('fs');
 
@@ -18,4 +19,9 @@ if (require.main === module) {
   main().catch(console.error);
 }
 
-module.exports = { HNScraper, saveDailyMarkdown };
+module.exports = {
+  HNScraper,
+  saveDailyMarkdown,
+  createMarkdownPoller,
+  readAndSummarizeLatestMarkdown,
+};
